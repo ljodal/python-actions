@@ -41,7 +41,7 @@ async function run() {
     listeners: {
       stdline: parseLine
     },
-    // ignoreReturnCode: true,
+    ignoreReturnCode: true,
     // silent: true,
   };
 
