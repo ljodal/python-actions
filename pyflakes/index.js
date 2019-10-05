@@ -24,7 +24,9 @@ async function run() {
       return;
     }
 
-    const column = match.groups.column ? parseInt(match.groups.column, 10) : undefined;
+    const column = match.groups.column
+      ? parseInt(match.groups.column, 10)
+      : undefined;
 
     annotations.push({
       path: match.groups.file,
@@ -32,7 +34,7 @@ async function run() {
       end_line: parseInt(match.groups.line, 10),
       start_column: column,
       end_column: column,
-      annotation_level: 'failure',
+      annotation_level: "failure",
       message: match.groups.message
     });
   }
@@ -42,10 +44,10 @@ async function run() {
       stdline: parseLine
     },
     ignoreReturnCode: true,
-    // silent: true,
+    silent: true
   };
 
-  await exec.exec("pyflakes", ['.'], options);
+  await exec.exec("pyflakes", ["."], options);
 
   // Count the number of failures
   const numErrors = annotations.reduce(
