@@ -32,7 +32,7 @@ async function run() {
       end_line: parseInt(match.groups.line, 10),
       start_column: column,
       end_column: column,
-      annotation_level: 'warning',
+      annotation_level: 'failure',
       message: match.groups.message
     });
   }
