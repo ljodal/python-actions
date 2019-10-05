@@ -1,6 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
+const path = require('path');
 
 async function run() {
   const maxErrors = parseInt(
@@ -29,7 +30,7 @@ async function run() {
       : undefined;
 
     annotations.push({
-      path: match.groups.file,
+      path: path.relative('.', match.groups.file),
       start_line: parseInt(match.groups.line, 10),
       end_line: parseInt(match.groups.line, 10),
       start_column: column,
