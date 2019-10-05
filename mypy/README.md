@@ -1,6 +1,6 @@
 # MyPy action
 
-Run MyPy and add 
+Run MyPy and add
 
 ## Inputs
 

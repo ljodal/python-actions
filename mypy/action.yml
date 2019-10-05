@@ -1,12 +1,12 @@
-name: 'MyPy'
-description: 'Run MyPy and annotate code with any warnings'
+name: "Mypy"
+description: "Run Mypy and annotate code with any warnings"
 inputs:
-    github-token:
-        description: 'A token to authenticate against GitHub'
-        required: true
-    max-errors:
-        description: 'Max number of warnings before reporting the check as failed'
-        required: true
+  github-token:
+    description: "A token to authenticate against GitHub"
+    required: true
+  max-errors:
+    description: "Max number of warnings before reporting the check as failed"
+    required: true
 runs:
-  using: 'node12'
-  main: 'index.js'
+  using: "node12"
+  main: "index.js"
