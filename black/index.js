@@ -22,8 +22,8 @@ async function run() {
 
     annotations.push({
       path: path.relative(".", match.groups.file),
-      start_line: 0,
-      end_line: 0,
+      start_line: 1,
+      end_line: 1,
       annotation_level: "failure",
       message: "File is incorrectly formatted, please run Black"
     });
