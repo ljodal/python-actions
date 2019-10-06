@@ -8,7 +8,7 @@ async function run() {
   const githubToken = core.getInput("github-token", { required: true });
   const octokit = new github.GitHub(githubToken);
 
-  const regex = /^would reformat (?<path>.*)$/i;
+  const regex = /^would reformat (?<file>.*)$/i;
   const annotations = [];
 
   function parseLine(line) {
