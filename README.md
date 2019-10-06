@@ -36,3 +36,16 @@ uses: ljodal/python-actions/black@master
 with:
   github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+## Black
+
+Run Black and annotate the code with any errors found. Usage:
+
+```yml
+name: Pylint
+uses: ljodal/python-actions/pylint@master
+with:
+  github-token: ${{ secrets.GITHUB_TOKEN }}
+  max-errors: 0
+  paths: some_path some_other_path
+```
