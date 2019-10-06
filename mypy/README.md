@@ -12,6 +12,10 @@ Run MyPy and add
 
 **Required** The GitHub API token.
 
+### `paths`
+
+**Required** An optional list of paths to run mypy on
+
 ## Example usage
 
 ```yml
@@ -20,4 +24,5 @@ uses: ljodal/python-actions/mypy@master
 with:
   github-token: ${{ secrets.GITHUB_TOKEN }}
   max-errors: 0
+  paths: some_path another_path
 ```

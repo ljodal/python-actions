@@ -7,6 +7,9 @@ inputs:
   max-errors:
     description: "Max number of warnings before reporting the check as failed"
     required: true
+  paths:
+    description: "Paths to run mypy on"
+    default: "."
 runs:
   using: "node12"
   main: "index.js"

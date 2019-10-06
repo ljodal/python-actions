@@ -22,6 +22,8 @@ async function run() {
   const githubToken = core.getInput("github-token", { required: true });
   const octokit = new github.GitHub(githubToken);
 
+  const paths = (core.getInput("paths") || '.').split(' ');
+
   const regex = /^(?<file>[^:]+):(?<line>\d+):(?<column>\d+): (?<type>\w+): (?<message>.*)\s+\[(?<error_code>[a-z\-]+)\]$/;
   const annotations = [];
 
@@ -58,7 +60,7 @@ async function run() {
     "--show-error-codes",
     "--hide-error-context",
     "--no-error-summary",
-    "."
+    ...paths
   ];
 
   await exec.exec("mypy", mypyArgs, options);
