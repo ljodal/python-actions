@@ -37,7 +37,7 @@ async function submitResult(githubToken, octokit, conclusion, annotations) {
   // Submit additional annotations (if more then maxAnnotations)
   for (let i = 1; i < Math.ceil(annotations.length / maxAnnotations); i++) {
     await octokit.checks.update({
-      id: result.data.id,
+      check_run_id: result.data.id,
       output: {
         ...output,
         annotations: annotations.slice(
