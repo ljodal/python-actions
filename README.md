@@ -37,9 +37,9 @@ with:
   github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## Black
+## Pylint
 
-Run Black and annotate the code with any errors found. Usage:
+Run Pylint and annotate the code with any errors found. Usage:
 
 ```yml
 name: Pylint
