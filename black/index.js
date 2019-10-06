@@ -34,7 +34,7 @@ async function run() {
       stdline: parseLine
     },
     ignoreReturnCode: true,
-    silent: true
+    // silent: true
   };
 
   const result = await exec.exec("black", ["--check", "."], options);
