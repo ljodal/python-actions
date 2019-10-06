@@ -14,8 +14,6 @@ async function run() {
   function parseLine(line) {
     const match = line.match(regex);
 
-    console.log(line, match);
-
     // Skip lines that do not match
     if (match === null) {
       console.log("Unable to parse line:", line);
@@ -33,7 +31,7 @@ async function run() {
 
   const options = {
     listeners: {
-      stdline: parseLine
+      errline: parseLine
     },
     ignoreReturnCode: true,
     // silent: true
