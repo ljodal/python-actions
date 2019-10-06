@@ -22,7 +22,7 @@ async function submitResult(githubToken, octokit, conclusion, annotations) {
   };
 
   // Create the check run and the first 50 annotations
-  let result = await octokit.checks.create({
+  const result = await octokit.checks.create({
     ...github.context.repo,
     name: "MyPy",
     head_sha: github.context.sha,
