@@ -34,7 +34,7 @@ async function run() {
       errline: parseLine
     },
     ignoreReturnCode: true,
-    // silent: true
+    silent: true
   };
 
   const result = await exec.exec("black", ["--check", "."], options);
@@ -52,8 +52,6 @@ async function run() {
       annotations: annotations
     }
   });
-
-  console.log('Project result:', updateResult);
 }
 
 run();
