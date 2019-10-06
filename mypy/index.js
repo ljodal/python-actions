@@ -2,6 +2,9 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
 
+// The maximum number of annotations that GitHub will accept in a single requrest
+const maxAnnotations = 50;
+
 function typeToAnnotationLevel(type) {
   switch (type) {
     case "info":
@@ -9,6 +12,39 @@ function typeToAnnotationLevel(type) {
     case "error":
     default:
       return "failure";
+  }
+}
+
+async function submitResult(githubToken, octokit, conclusion, annotations) {
+  const output = {
+    title: "Mypy",
+    summary: `There are ${annotations.length} mypy warnings`
+  };
+
+  // Create the check run and the first 50 annotations
+  let result = await octokit.checks.create({
+    ...github.context.repo,
+    name: "MyPy",
+    head_sha: github.context.sha,
+    completed_at: new Date().toISOString(),
+    conclusion: conclusion,
+    output: {
+      ...output,
+      annotations: annotations.slice(0, maxAnnotations)
+    }
+  });
+
+  // Submit additional annotations (if more then maxAnnotations)
+  for (let i = 1; i < Math.ceil(annotations.length / maxAnnotations); i++) {
+    await octokit.checks.create({
+      output: {
+        ...output,
+        annotations: annotations.slice(
+          i * maxAnnotations,
+          i * maxAnnotations + maxAnnotations
+        )
+      }
+    });
   }
 }
 
@@ -22,7 +58,7 @@ async function run() {
   const githubToken = core.getInput("github-token", { required: true });
   const octokit = new github.GitHub(githubToken);
 
-  const paths = (core.getInput("paths") || '.').split(' ');
+  const paths = (core.getInput("paths") || ".").split(" ");
 
   const regex = /^(?<file>[^:]+):(?<line>\d+):(?<column>\d+): (?<type>\w+): (?<message>.*)\s+\[(?<error_code>[a-z\-]+)\]$/;
   const annotations = [];
@@ -71,18 +107,9 @@ async function run() {
     0
   );
 
-  const updateResult = await octokit.checks.create({
-    ...github.context.repo,
-    name: "MyPy",
-    head_sha: github.context.sha,
-    completed_at: new Date().toISOString(),
-    conclusion: numErrors > maxErrors ? "failure" : "success",
-    output: {
-      title: "MyPy",
-      summary: "",
-      annotations: annotations
-    }
-  });
+  const conclusion = numErrors > maxErrors ? "failure" : "success";
+
+  await submitResult(githubToken, octokit, conclusion, annotations);
 }
 
 run();
