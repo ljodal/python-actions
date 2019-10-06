@@ -62,7 +62,7 @@ async function run() {
   const args = [
     "--msg-template",
     "{path}:{line}:{column} {msg_id} {symbol} {msg}",
-    ...args
+    ...paths
   ];
 
   await exec.exec("pylint", args, options);
