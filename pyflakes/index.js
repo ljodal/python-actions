@@ -51,6 +51,8 @@ async function run() {
   const githubToken = core.getInput("github-token", { required: true });
   const octokit = new github.GitHub(githubToken);
 
+  const ignoredFiles = (core.getInput("ignored-files") || "").split(/\s+/);
+
   const regex = /^(?<file>.*):(?<line>\d+)(:(?<column>\d+))?: (?<message>.*)$/;
   const annotations = [];
 
@@ -66,6 +68,12 @@ async function run() {
     const column = match.groups.column
       ? parseInt(match.groups.column, 10)
       : undefined;
+
+    const filePath = path.relative(".", match.groups.file);
+
+    if (ignoredFiles.includes(filePath)) {
+      return;
+    }
 
     annotations.push({
       path: path.relative(".", match.groups.file),
