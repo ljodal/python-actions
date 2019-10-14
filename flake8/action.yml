@@ -1,0 +1,15 @@
+name: "Pyflakes"
+description: "Run Pyflakes and annotate code with any warnings"
+inputs:
+  github-token:
+    description: "A token to authenticate against GitHub"
+    required: true
+  max-errors:
+    description: "Max number of warnings before reporting the check as failed"
+    required: true
+  ignored-files:
+    description: "A list of file paths to ignore"
+    requried: false
+runs:
+  using: "node12"
+  main: "index.js"
