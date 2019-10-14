@@ -8,14 +8,14 @@ const maxAnnotations = 50;
 
 async function submitResult({ githubToken, octokit, conclusion, annotations }) {
   const output = {
-    title: "Pyflakes",
+    title: "flake8",
     summary: `There are ${annotations.length} pyflake warnings`
   };
 
   // Create the check run and the first 50 annotations
   const result = await octokit.checks.create({
     ...github.context.repo,
-    name: "Pyflakes",
+    name: "flake8",
     head_sha: github.context.sha,
     completed_at: new Date().toISOString(),
     conclusion: conclusion,
@@ -52,8 +52,9 @@ async function run() {
   const octokit = new github.GitHub(githubToken);
 
   const ignoredFiles = (core.getInput("ignored-files") || "").split(/\s+/);
+  const paths = (core.getInput("paths") || ".").split(/\s+/);
 
-  const regex = /^(?<file>.*):(?<line>\d+)(:(?<column>\d+))?: (?<message>.*)$/;
+  const regex = /^(?<file>.*):(?<line>\d+)(:(?<column>\d+))?: (?<code>[A-Z]\d{3}) (?<message>.*)$/;
   const annotations = [];
 
   function parseLine(line) {
@@ -82,6 +83,7 @@ async function run() {
       start_column: column,
       end_column: column,
       annotation_level: "failure",
+      title: match.groups.code,
       message: match.groups.message
     });
   }
@@ -94,7 +96,7 @@ async function run() {
     silent: true
   };
 
-  await exec.exec("pyflakes", ["."], options);
+  await exec.exec("flake8", [...paths], options);
 
   // Count the number of failures
   const numErrors = annotations.reduce(
