@@ -54,7 +54,7 @@ async function run() {
   const ignoredFiles = (core.getInput("ignored-files") || "").split(/\s+/);
   const paths = (core.getInput("paths") || ".").split(/\s+/);
 
-  const regex = /^(?<file>[^:]+):(?<line>\d+)(:(?<column>\d+))?: (?<code>[A-Z]\d{3}) (?<message>.*)$/;
+  const regex = /^(?<file>[^:]+):(?<line>\d+)(:(?<column>\d+))?: (?<code>[A-Z]\d{3}):? (?<message>.*)$/;
   const annotations = [];
 
   function parseLine(line) {
