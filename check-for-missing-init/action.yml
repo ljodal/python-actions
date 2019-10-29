@@ -1,0 +1,12 @@
+name: "Missing __init__.py check"
+description: "Check for files with *.py files, but no __init__.py"
+inputs:
+  github-token:
+    description: "A token to authenticate against GitHub"
+    required: true
+  paths:
+    description: "A space separated list of paths to check"
+    required: true
+runs:
+  using: "node12"
+  main: "index.js"

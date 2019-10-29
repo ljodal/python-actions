@@ -36,3 +36,16 @@ uses: ljodal/python-actions/black@master
 with:
   github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+
+## Missing __init__.py check
+
+Check for any directories containing a .py file, but no \_\_init\_\_.py file
+
+```yml
+name: Missing __init__.py check
+uses: ljodal/python-actions/check-for-missing-init@feature/check-for-missing-init
+with:
+  github-token: ${{ secrets.GITHUB_TOKEN }}
+  paths: .
+```
