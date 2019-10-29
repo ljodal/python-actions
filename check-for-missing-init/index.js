@@ -83,8 +83,6 @@ async function run() {
     ? `Some \`__init__.py\` files are missing, create them with:\n\n\`\`\`bash\n${commandToCreate}\n\`\`\``
     : "No missing `__init__.py` files";
 
-  console.log(summary);
-
   const updateResult = await octokit.checks.create({
     ...github.context.repo,
     name: "Missing __init__.py check",
