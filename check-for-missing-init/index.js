@@ -92,7 +92,7 @@ async function run() {
     completed_at: new Date().toISOString(),
     conclusion: isMissingFiles ? "failure" : "success",
     output: {
-      title: "Missing __init.py check",
+      title: "Missing __init__.py check",
       summary: summary
     }
   });
