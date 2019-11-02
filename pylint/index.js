@@ -2,6 +2,44 @@ const core = require("@actions/core");
 const github = require("@actions/github");
 const exec = require("@actions/exec");
 
+// The maximum number of annotations that GitHub will accept in a single requrest
+const maxAnnotations = 50;
+
+async function submitResult({ githubToken, octokit, conclusion, annotations }) {
+  const output = {
+    name: "Pylint",
+    summary: `There are ${annotations.length} pylint warnings`
+  };
+
+  // Create the check run and the first 50 annotations
+  const result = await octokit.checks.create({
+    ...github.context.repo,
+    name: "Pylint",
+    head_sha: github.context.sha,
+    completed_at: new Date().toISOString(),
+    conclusion: conclusion,
+    output: {
+      ...output,
+      annotations: annotations.slice(0, maxAnnotations)
+    }
+  });
+
+  // Submit additional annotations (if more then maxAnnotations)
+  for (let i = 1; i < Math.ceil(annotations.length / maxAnnotations); i++) {
+    await octokit.checks.update({
+      ...github.context.repo,
+      check_run_id: result.data.id,
+      output: {
+        ...output,
+        annotations: annotations.slice(
+          i * maxAnnotations,
+          i * maxAnnotations + maxAnnotations
+        )
+      }
+    });
+  }
+}
+
 function codeToAnnotationLevel(code) {
   switch (code.substring(0, 1).toLowerCase()) {
     case "c":
@@ -73,18 +111,8 @@ async function run() {
     0
   );
 
-  const updateResult = await octokit.checks.create({
-    ...github.context.repo,
-    name: "Pylint",
-    head_sha: github.context.sha,
-    completed_at: new Date().toISOString(),
-    conclusion: numErrors > maxErrors ? "failure" : "success",
-    output: {
-      title: "Pylint",
-      summary: "",
-      annotations: annotations
-    }
-  });
+  const conclusion = numErrors > maxErrors ? "failure" : "success";
+  await submitResult({ githubToken, octokit, conclusion, annotations });
 }
 
 run();
