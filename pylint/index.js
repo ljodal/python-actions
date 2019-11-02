@@ -7,7 +7,7 @@ const maxAnnotations = 50;
 
 async function submitResult({ githubToken, octokit, conclusion, annotations }) {
   const output = {
-    name: "Pylint",
+    title: "Pylint",
     summary: `There are ${annotations.length} pylint warnings`
   };
 
